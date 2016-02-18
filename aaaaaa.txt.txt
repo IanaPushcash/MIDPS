@@ -1,0 +1,5 @@
+git status  // статус
+git commit //камменты
+git add . //добавить файл
+git push //добавить на сайт
+git pull//скачать с сайта
