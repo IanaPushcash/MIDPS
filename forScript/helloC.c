@@ -2,6 +2,7 @@
  
 int main()
 {
-  printf("Hello world\n");
+  printf("What do you want to speak\n");
+  printf("Hello my world\n");
   return 0;
 }
