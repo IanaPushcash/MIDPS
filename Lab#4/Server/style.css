@@ -1,0 +1,14 @@
+P {
+    text-indent: 1.5em;
+    text-align: justify;
+}
+div{
+    padding-left: 10px;
+    padding-right: 10px;
+}
+body{
+    background-image: linear-gradient(to right, rgba(30,87,153,0), rgba(204, 242, 252, 0.8), rgb(84, 207, 239),
+    rgb(112, 182, 229), rgba(41,137,216,1), rgb(93, 244, 241), rgb(174, 246, 221),
+    rgba(141, 194, 228, 0.8), rgba(50, 146, 255, 0));
+
+}
