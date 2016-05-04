@@ -1,27 +1,24 @@
 package com.example.firstapp;
 
-import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Application;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
-import android.os.Build;
+import android.media.AudioManager;
+import android.media.SoundPool;
 import android.os.CountDownTimer;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.app.Notification;
 import android.widget.TextView;
 
-import java.util.Timer;
-
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity implements SoundPool.OnLoadCompleteListener {
+    final int MAX_STREAMS = 5;
+    final String LOG_TAG = "myLogs";
+    public static SoundPool sp;
+    public static int soundIdShot;
 
     static int tW;
     static int tR;
@@ -30,7 +27,6 @@ public class MainActivity extends AppCompatActivity {
     public static Context c;
     EditText textWork;
     EditText textRelax;
-    private static final int NOTIFY_ID = 101;
     static TextView time;
 
     @Override
@@ -42,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
         textRelax = (EditText) findViewById(R.id.TextRelax);
         time = (TextView) findViewById(R.id.time);
 
+        sp = new SoundPool(MAX_STREAMS, AudioManager.STREAM_MUSIC, 0);
+        sp.setOnLoadCompleteListener(this);
+
+        soundIdShot = sp.load(this, R.raw.eralas, 1);
+
     }
 
     public void butStartOnClick(final View view){
@@ -49,8 +50,13 @@ public class MainActivity extends AppCompatActivity {
         tR = Integer.parseInt(textRelax.getText().toString());
         currentTime = tW;
         c = view.getContext();
+        try {
+            stopService(new Intent(this, MyService.class));
+        } catch (Exception e){
+            Log.d(LOG_TAG, e.toString());
+        }
         startService(new Intent(c, MyService.class));
-        //setTimer(view);
+        //setTimer(c);
     }
 
     static public void setTimer(final Context cont){
@@ -65,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             public void onFinish() {
+                sp.play(soundIdShot, 1, 1, 0, 0, 1);
                 AlertDialog.Builder builder = new AlertDialog.Builder(cont);
                 builder.setTitle("Важное сообщение!")
                         .setMessage("Время истекло!")
@@ -72,14 +79,16 @@ public class MainActivity extends AppCompatActivity {
                         .setNegativeButton("ОК",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
+                                        if (currentTime == tW) currentTime = tR;
+                                        else currentTime = tW;
+                                        setTimer(cont);
                                         dialog.cancel();
                                     }
                                 });
                 AlertDialog alert = builder.create();
                 alert.show();
-                if (currentTime == tW) currentTime = tR;
-                else currentTime = tW;
-                setTimer(cont);
+
+
             }
         }.start();
     }
@@ -89,6 +98,11 @@ public class MainActivity extends AppCompatActivity {
     public void butCancelOnClick(View view){
         tim1.cancel();
         stopService(new Intent(this, MyService.class));
+
+    }
+
+    @Override
+    public void onLoadComplete(SoundPool soundPool, int sampleId, int status) {
 
     }
 }
