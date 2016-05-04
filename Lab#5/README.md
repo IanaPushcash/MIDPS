@@ -2,7 +2,10 @@
 Mobile application.
 
 Язык: Java
+
 Среда разработки: Android Studio
+
 Приложение: Pomodoro
+
 
 Отчет в LaTeX.
