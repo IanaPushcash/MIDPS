@@ -22,14 +22,19 @@
             android:layout_height="wrap_content"
             android:id="@+id/textView"
             android:textAlignment="center"
-            android:textSize="40dp"
+            android:textSize="50dp"
             android:textIsSelectable="true"
             android:gravity="top|left|right"
-            android:textColor="@color/background_material_light"
+            android:textColor="@android:color/holo_red_dark"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:elegantTextHeight="true" />
+            android:elegantTextHeight="true"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="50dp"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold"
+            android:stateListAnimator="@color/accent_material_light" />
 
         <TextView
             android:text="@string/text2"
@@ -104,14 +109,15 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:text="Start"
+            android:text="  Start  "
             android:id="@+id/butStart"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
             android:layout_gravity="left"
             android:layout_weight="0"
-            android:onClick="butStartOnClick" />
+            android:onClick="butStartOnClick"
+            android:textSize="40dp" />
 
         <Button
             android:layout_width="wrap_content"
@@ -123,7 +129,8 @@
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="20dp"
             android:layout_weight="0"
-            android:onClick="butCancelOnClick" />
+            android:onClick="butCancelOnClick"
+            android:textSize="40dp" />
     </LinearLayout>
 
 </RelativeLayout>

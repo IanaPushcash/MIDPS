@@ -42,30 +42,34 @@ public class MainActivity extends Activity implements SoundPool.OnLoadCompleteLi
         sp.setOnLoadCompleteListener(this);
 
         soundIdShot = sp.load(this, R.raw.eralas, 1);
-
+        tW = tR = 0;
     }
 
-    public void butStartOnClick(final View view){
-        tW = Integer.parseInt(textWork.getText().toString());
-        tR = Integer.parseInt(textRelax.getText().toString());
-        currentTime = tW;
-        c = view.getContext();
+    public void butStartOnClick(final View view) {
         try {
             stopService(new Intent(this, MyService.class));
-        } catch (Exception e){
-            Log.d(LOG_TAG, e.toString());
+        } catch (Exception e) {}
+        try {
+            tW = Integer.parseInt(textWork.getText().toString());
+            tR = Integer.parseInt(textRelax.getText().toString());
+            currentTime = tW;
+            c = view.getContext();
+            startService(new Intent(c, MyService.class));
+            //setTimer(c);
+        } catch (Exception e) {
+            tW = tR = 0;
         }
-        startService(new Intent(c, MyService.class));
-        //setTimer(c);
+
     }
 
-    static public void setTimer(final Context cont){
-        tim1 = new CountDownTimer(currentTime*60*1000, 1000) {
+    static public void setTimer(final Context cont) {
+        tim1 = new CountDownTimer(currentTime * 60 * 1000, 1000) {
             int i = 1;
             String str = "";
+
             public void onTick(long millisUntilFinished) {
-                int cur = currentTime*60 - i++;
-                str = (cur/60) + ":" + (cur%60);
+                int cur = currentTime * 60 - i++;
+                str = (cur / 60) + ":" + (cur % 60);
                 time.setText(str);
 
             }
@@ -94,8 +98,7 @@ public class MainActivity extends Activity implements SoundPool.OnLoadCompleteLi
     }
 
 
-
-    public void butCancelOnClick(View view){
+    public void butCancelOnClick(View view) {
         tim1.cancel();
         stopService(new Intent(this, MyService.class));
 
