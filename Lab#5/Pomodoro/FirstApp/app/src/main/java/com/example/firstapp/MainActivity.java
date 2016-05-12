@@ -16,19 +16,19 @@ import android.widget.TextView;
 
 public class MainActivity extends Activity implements SoundPool.OnLoadCompleteListener {
     final int MAX_STREAMS = 5;
-    final String LOG_TAG = "myLogs";
     public static SoundPool sp;
     public static int soundIdShot;
 
-    static int tW;
-    static int tR;
+    static int workingTime;
+    static int relaxTime;
     static int currentTime;
-    static CountDownTimer tim1;
+    static CountDownTimer timer;
     public static Context c;
     EditText textWork;
     EditText textRelax;
     static TextView time;
-
+    static Boolean typeOftime = false;
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,7 +42,7 @@ public class MainActivity extends Activity implements SoundPool.OnLoadCompleteLi
         sp.setOnLoadCompleteListener(this);
 
         soundIdShot = sp.load(this, R.raw.eralas, 1);
-        tW = tR = 0;
+        workingTime = relaxTime = 0;
     }
 
     public void butStartOnClick(final View view) {
@@ -50,20 +50,20 @@ public class MainActivity extends Activity implements SoundPool.OnLoadCompleteLi
             stopService(new Intent(this, MyService.class));
         } catch (Exception e) {}
         try {
-            tW = Integer.parseInt(textWork.getText().toString());
-            tR = Integer.parseInt(textRelax.getText().toString());
-            currentTime = tW;
+            workingTime = Integer.parseInt(textWork.getText().toString());
+            relaxTime = Integer.parseInt(textRelax.getText().toString());
+            currentTime = workingTime;
+            typeOftime = false;
             c = view.getContext();
             startService(new Intent(c, MyService.class));
-            //setTimer(c);
         } catch (Exception e) {
-            tW = tR = 0;
+            workingTime = relaxTime = 0;
         }
 
     }
 
     static public void setTimer(final Context cont) {
-        tim1 = new CountDownTimer(currentTime * 60 * 1000, 1000) {
+        timer = new CountDownTimer(currentTime * 60 * 1000, 1000) {
             int i = 1;
             String str = "";
 
@@ -78,13 +78,19 @@ public class MainActivity extends Activity implements SoundPool.OnLoadCompleteLi
                 sp.play(soundIdShot, 1, 1, 0, 0, 1);
                 AlertDialog.Builder builder = new AlertDialog.Builder(cont);
                 builder.setTitle("Важное сообщение!")
-                        .setMessage("Время истекло!")
+                        .setMessage((typeOftime ? "Для отдыха":"Рабочее") + " время истекло!")
                         .setCancelable(false)
                         .setNegativeButton("ОК",
                                 new DialogInterface.OnClickListener() {
                                     public void onClick(DialogInterface dialog, int id) {
-                                        if (currentTime == tW) currentTime = tR;
-                                        else currentTime = tW;
+                                        if (currentTime == workingTime) {
+                                            currentTime = relaxTime;
+                                            typeOftime = true;
+                                        }
+                                        else {
+                                            currentTime = workingTime;
+                                            typeOftime = false;
+                                        }
                                         setTimer(cont);
                                         dialog.cancel();
                                     }
@@ -99,7 +105,7 @@ public class MainActivity extends Activity implements SoundPool.OnLoadCompleteLi
 
 
     public void butCancelOnClick(View view) {
-        tim1.cancel();
+        timer.cancel();
         stopService(new Intent(this, MyService.class));
 
     }

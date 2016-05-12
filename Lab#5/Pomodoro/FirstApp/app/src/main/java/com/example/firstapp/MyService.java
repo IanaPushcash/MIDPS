@@ -27,7 +27,7 @@ public class MyService extends Service {
 
     public void onDestroy() {
         super.onDestroy();
-        MainActivity.tim1.cancel();
+        MainActivity.timer.cancel();
         Log.d(LOG_TAG, "onDestroy");
     }
 

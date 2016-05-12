@@ -117,7 +117,8 @@
             android:layout_gravity="left"
             android:layout_weight="0"
             android:onClick="butStartOnClick"
-            android:textSize="40dp" />
+            android:textSize="40dp"
+            android:visibility="visible" />
 
         <Button
             android:layout_width="wrap_content"
